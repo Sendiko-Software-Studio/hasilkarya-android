@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "4210674230f1574bd7909d4187abfee2",
+    "identityHash": "5b87fd5001e3ca7a9e448965f506c38b",
     "entities": [
       {
         "tableName": "material",
@@ -212,7 +212,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4210674230f1574bd7909d4187abfee2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5b87fd5001e3ca7a9e448965f506c38b')"
     ]
   }
 }
