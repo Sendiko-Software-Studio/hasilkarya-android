@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.system.hasilkarya"
+    namespace = "com.system.shailendra"
     compileSdk = 34
 
     defaultConfig {
