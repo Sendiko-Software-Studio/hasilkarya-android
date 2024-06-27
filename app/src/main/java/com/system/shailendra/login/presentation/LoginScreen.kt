@@ -1,6 +1,7 @@
 package com.system.shailendra.login.presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,15 +17,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.system.shailendra.R
 import com.system.shailendra.core.ui.components.PasswordTextField
 import com.system.shailendra.core.navigation.Destination
 import com.system.shailendra.core.ui.components.ContentBoxWithNotification
 import com.system.shailendra.core.ui.components.NormalTextField
+import com.system.shailendra.core.ui.theme.HasilKaryaTheme
 import com.system.shailendra.core.ui.theme.poppinsFont
 import kotlinx.coroutines.delay
 
@@ -63,11 +69,17 @@ fun LoginScreen(
                        .fillMaxSize()
                        .padding(horizontal = 16.dp),
                    verticalArrangement = Arrangement.Center,
+                   horizontalAlignment = Alignment.CenterHorizontally
                ) {
+                   Image(
+                       painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                       contentDescription = null,
+                       modifier = Modifier.size(256.dp)
+                   )
                    Text(
                        text = "Login",
                        fontSize = 24.sp,
-                       modifier = Modifier.padding(vertical = 8.dp),
+                       modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
                        fontWeight = FontWeight.Bold,
                        fontFamily = poppinsFont
                    )
@@ -118,4 +130,18 @@ fun LoginScreen(
            }
        }
    )
+}
+
+@Preview
+@Composable
+private fun LoginScreenPrev() {
+    HasilKaryaTheme(darkTheme = true, dynamicColor = true) {
+        LoginScreen(
+            state = LoginScreenState(),
+            onEvent = {},
+            onNavigate = {
+
+            }
+        )
+    }
 }

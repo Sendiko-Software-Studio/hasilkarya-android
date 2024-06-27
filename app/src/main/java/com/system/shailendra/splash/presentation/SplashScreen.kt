@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -14,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.system.shailendra.R
 import com.system.shailendra.core.navigation.Destination
+import com.system.shailendra.core.ui.theme.HasilKaryaTheme
 import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -36,18 +39,15 @@ fun SplashScreen(
     Scaffold {
         Box(
             modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.background
-                )
+                .background(color = MaterialTheme.colorScheme.background)
                 .fillMaxSize()
-                .padding(
-                    it
-                ),
+                .padding(it),
             contentAlignment = Alignment.Center,
             content = {
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.size(256.dp)
                 )
             }
         )
@@ -57,10 +57,12 @@ fun SplashScreen(
 @Preview
 @Composable
 private fun SplashScreenPrev() {
-    SplashScreen(
-        state = SplashScreenState(),
-        onNavigate = {
+    HasilKaryaTheme(darkTheme = true) {
+        SplashScreen(
+            state = SplashScreenState(),
+            onNavigate = {
 
-        }
-    )
+            }
+        )
+    }
 }
