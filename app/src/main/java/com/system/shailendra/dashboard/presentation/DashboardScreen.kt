@@ -37,7 +37,6 @@ import com.system.shailendra.core.network.Status
 import com.system.shailendra.core.ui.theme.poppinsFont
 import com.system.shailendra.dashboard.presentation.component.MenuCard
 import com.system.shailendra.dashboard.presentation.component.MenuCardExpendable
-import com.system.shailendra.dashboard.presentation.component.UnsentItemCard
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -135,20 +134,6 @@ fun DashboardScreen(
                             onClickAction2 = {
                                 onNavigate(Destination.GasHVQrScreen)
                             }
-                        )
-                    }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    AnimatedVisibility(
-                        visible = state.totalData != 0,
-                        enter = expandHorizontally(),
-                        exit = shrinkHorizontally()
-                    ) {
-                        UnsentItemCard(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            itemCount = state.totalData
                         )
                     }
                 }

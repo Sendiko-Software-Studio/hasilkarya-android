@@ -1,6 +1,6 @@
 package com.system.shailendra.dashboard.presentation
 
-import com.system.hasilkarya.core.network.Status
+import com.system.shailendra.core.network.Status
 
 sealed class DashboardScreenEvent {
     data object CheckDataAndPost: DashboardScreenEvent()

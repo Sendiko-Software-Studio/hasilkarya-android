@@ -214,7 +214,7 @@ class DashboardScreenViewModel @Inject constructor(
                 errorLog = message,
                 remarks = material.remarks,
                 date = material.date,
-                ratio = material.ratio
+                ratio = material.ratio.toString()
             )
 
             val request = materialRepository.postToLog(token, data)
@@ -516,6 +516,9 @@ class DashboardScreenViewModel @Inject constructor(
             DashboardScreenEvent.CheckDataAndPost -> viewModelScope.launch(Dispatchers.IO) {
                 checkAndPostDatas()
             }
+
+            is DashboardScreenEvent.CheckToken -> TODO()
+            DashboardScreenEvent.RetryLogin -> TODO()
         }
     }
 }

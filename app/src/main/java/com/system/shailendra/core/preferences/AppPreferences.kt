@@ -16,6 +16,19 @@ class AppPreferences @Inject constructor(private val dataStore: DataStore<Prefer
     private val emailKey = stringPreferencesKey("email")
     private val roleKey = stringPreferencesKey("role")
     private val themeKey = stringPreferencesKey(AppThemeEnum.Default.name)
+    private val passwordKey = stringPreferencesKey("password")
+
+    suspend fun setPassword(password: String) {
+        dataStore.edit {
+            it[passwordKey] = password
+        }
+    }
+
+    fun getPassword(): Flow<String> {
+        return dataStore.data.map {
+            it[passwordKey]?:""
+        }
+    }
     
     suspend fun setTheme(theme: AppThemeEnum) {
         dataStore.edit {

@@ -197,7 +197,7 @@ class MaterialQrScreenViewModel @Inject constructor(
         )
     }
 
-    private fun postMaterial(materialEntity: MaterialEntity, connectionStatus: Status) {
+    private fun postMaterial(materialEntity: MaterialEntity) {
         _state.update { it.copy(isLoading = true) }
         val token = "Bearer ${state.value.token}"
         val data = PostMaterialRequest(
@@ -209,59 +209,48 @@ class MaterialQrScreenViewModel @Inject constructor(
             remarks = materialEntity.remarks,
             date = materialEntity.date
         )
-        if (connectionStatus == Status.Available) {
-            val request = repository.postMaterial(token, data)
-            request.enqueue(
-                object : Callback<PostMaterialResponse> {
-                    override fun onResponse(
-                        call: Call<PostMaterialResponse>,
-                        response: Response<PostMaterialResponse>
-                    ) {
-                        _state.update { it.copy(isLoading = false) }
-                        when (response.code()) {
-                            201 -> {
-                                _state.update {
-                                    it.copy(
-                                        isPostSuccessful = true,
-                                        notificationMessage = "Data tersimpan!",
-                                    )
-                                }
+        val request = repository.postMaterial(token, data)
+        request.enqueue(
+            object : Callback<PostMaterialResponse> {
+                override fun onResponse(
+                    call: Call<PostMaterialResponse>,
+                    response: Response<PostMaterialResponse>
+                ) {
+                    _state.update { it.copy(isLoading = false) }
+                    when (response.code()) {
+                        201 -> {
+                            _state.update {
+                                it.copy(
+                                    isPostSuccessful = true,
+                                    notificationMessage = "Data tersimpan!",
+                                )
                             }
+                        }
 
-                            else -> {
-                                _state.update {
-                                    it.copy(
-                                        notificationMessage = "Duh, ada yang salah",
-                                        isRequestFailed = FailedRequest(isFailed = true),
-                                    )
-                                }
+                        else -> {
+                            _state.update {
+                                it.copy(
+                                    notificationMessage = "Duh, ada yang salah",
+                                    isRequestFailed = FailedRequest(isFailed = true),
+                                )
                             }
                         }
                     }
-
-                    override fun onFailure(call: Call<PostMaterialResponse>, t: Throwable) {
-                        viewModelScope.launch { repository.saveMaterial(materialEntity) }
-                        _state.update {
-                            it.copy(
-                                isLoading = false,
-                                notificationMessage = "Data berhasil tersimpan!",
-                                isPostSuccessful = true
-                            )
-                        }
-                    }
-
                 }
-            )
-        } else {
-            viewModelScope.launch { repository.saveMaterial(materialEntity) }
-            _state.update {
-                it.copy(
-                    notificationMessage = "Data berhasil tersimpan!",
-                    isLoading = false,
-                    isPostSuccessful = true
-                )
+
+                override fun onFailure(call: Call<PostMaterialResponse>, t: Throwable) {
+                    viewModelScope.launch { repository.saveMaterial(materialEntity) }
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            notificationMessage = "Data berhasil tersimpan!",
+                            isPostSuccessful = true
+                        )
+                    }
+                }
+
             }
-        }
+        )
     }
 
     // state related methods
@@ -330,7 +319,7 @@ class MaterialQrScreenViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun onSaveMaterial(connectionStatus: Status) {
+    private fun onSaveMaterial() {
         if (state.value.materialVolume.isBlank()) {
             _state.update {
                 it.copy(
@@ -350,7 +339,7 @@ class MaterialQrScreenViewModel @Inject constructor(
                 checkerId = state.value.userId,
                 date = LocalDateTime.now().toString(),
             )
-            postMaterial(data, connectionStatus)
+            postMaterial(data)
         }
     }
 
@@ -367,7 +356,7 @@ class MaterialQrScreenViewModel @Inject constructor(
 
             is MaterialQrScreenEvent.OnNewRemarks -> onRemarksChange(event.remarks)
 
-            is MaterialQrScreenEvent.SaveMaterial -> onSaveMaterial(event.connectionStatus)
+            is MaterialQrScreenEvent.SaveMaterial -> onSaveMaterial()
 
             MaterialQrScreenEvent.OnClearNotification -> onClearNotification()
 

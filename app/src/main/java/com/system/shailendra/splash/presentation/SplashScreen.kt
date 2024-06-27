@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.system.shailendra.R
 import com.system.shailendra.core.navigation.Destination
 import kotlinx.coroutines.delay
@@ -51,4 +52,15 @@ fun SplashScreen(
             }
         )
     }
+}
+
+@Preview
+@Composable
+private fun SplashScreenPrev() {
+    SplashScreen(
+        state = SplashScreenState(),
+        onNavigate = {
+
+        }
+    )
 }
