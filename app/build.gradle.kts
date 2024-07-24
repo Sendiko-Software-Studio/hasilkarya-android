@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.dagger.hilt.android)
-    alias(libs.plugins.jetbrains.kotlin.kapt)
+    alias(libs.plugins.com.google.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -21,11 +22,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        kapt {
-          arguments {
-              arg("room.schemaLocation", "$projectDir/schemas")
-          }
-        }
     }
 
     buildTypes {
@@ -36,6 +32,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -82,14 +81,15 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.navigation.compose)
-    kapt(libs.com.google.dagger.hilt.android.compiler)
+    ksp(libs.com.google.dagger.hilt.android.compiler)
+    ksp(libs.com.google.dagger.compiler)
     implementation(libs.com.squareup.retrofit2.retrofit)
     implementation(libs.com.squareup.retrofit2.converter.gson)
     implementation(libs.com.squareup.okhttp3.okhttp)
     implementation(libs.com.squareup.okhttp3.logging.interceptor)
     implementation(libs.androidx.room.ktx)
     //noinspection KaptUsageInsteadOfKsp
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
