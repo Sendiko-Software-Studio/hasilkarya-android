@@ -9,16 +9,13 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,9 +24,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FlashlightOn
+import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.rounded.QrCode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,18 +42,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
+import com.system.shailendra.R
+import com.system.shailendra.core.ui.theme.HasilKaryaTheme
 import com.system.shailendra.core.ui.theme.poppinsFont
 import com.system.shailendra.core.utils.ding
 import com.system.shailendra.qr.domain.BarcodeAnalyzer
-import com.system.shailendra.R
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -200,32 +199,55 @@ fun QrScanComponent(
                 .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
-                Text(
+                Row(
                     modifier = Modifier
-                        .padding(
-                            vertical = 24.dp,
-                            horizontal = 24.dp
+                        .fillMaxWidth()
+                        .padding(horizontal = 36.dp, vertical = 48.dp)
+                        .background(MaterialTheme.colorScheme.background),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    AnimatedVisibility(
+                        visible = !isValid,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                        content = {
+                            Icon(
+                                imageVector = Icons.Rounded.QrCode,
+                                contentDescription = "QrCode",
+                                modifier = Modifier.size(128.dp)
+                            )
+                        }
+                    )
+                    AnimatedVisibility(
+                        visible = isValid,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                        content = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.check),
+                                contentDescription = "sukses",
+                                modifier = Modifier.size(64.dp)
+                            )
+                        }
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = if (!isValid) "Scan QR $title" else "Scan berhasil",
+                            fontFamily = poppinsFont,
+                            style = MaterialTheme.typography.titleLarge
                         )
-                        .fillMaxWidth(),
-                    text = if (isValid) "Scan QR berhasil!" else "Scan QR $title",
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    fontFamily = poppinsFont
-                )
-                Spacer(modifier = Modifier.size(16.dp))
-                AnimatedVisibility(
-                    visible = isValid,
-                    modifier = Modifier.padding(bottom = 32.dp),
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically(),
-                    content = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.check),
-                            contentDescription = "ceklist",
-                            tint = MaterialTheme.colorScheme.onBackground
+                        Text(
+                            text = "Arahkan kamera Anda ke QR Code untuk melanjutkan.",
+                            fontFamily = poppinsFont,
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
-                )
+                }
             }
         )
     }
@@ -233,4 +255,52 @@ fun QrScanComponent(
 
 fun toggleFash(camera: Camera, isOn: Boolean) {
     camera.cameraControl.enableTorch(isOn)
+}
+
+@androidx.compose.ui.tooling.preview.Preview
+@Composable
+private fun QrScanComponentPrev() {
+    HasilKaryaTheme {
+        Surface {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(Color.Blue)
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 36.dp, vertical = 48.dp)
+                        .background(MaterialTheme.colorScheme.background),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.QrCode,
+                        contentDescription = "QrCode",
+                        modifier = Modifier.size(64.dp)
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(
+                            text = "Scan QR Truck",
+                            fontFamily = poppinsFont,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = "Arahkan kamera Anda ke QR Code untuk melanjutkan.",
+                            fontFamily = poppinsFont,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
